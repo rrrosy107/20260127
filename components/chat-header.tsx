@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { Menu, Trash2, Download, User } from 'lucide-react'
+import { Menu, Trash2, Download, User, CreditCard } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -13,6 +13,7 @@ import {
 import { useAuth } from '@/lib/auth'
 import { LoginDialog } from '@/components/auth/login-dialog'
 import { RegisterDialog } from '@/components/auth/register-dialog'
+import { SubscriptionDialog } from '@/components/subscription-dialog'
 
 interface ChatHeaderProps {
   title: string
@@ -32,6 +33,7 @@ export function ChatHeader({
   const { user, logout } = useAuth()
   const [loginOpen, setLoginOpen] = React.useState(false)
   const [registerOpen, setRegisterOpen] = React.useState(false)
+  const [subscriptionOpen, setSubscriptionOpen] = React.useState(false)
 
   return (
     <header className="flex h-14 items-center justify-between border-b border-border bg-background px-4">
@@ -49,6 +51,15 @@ export function ChatHeader({
       </div>
 
       <div className="flex items-center gap-2">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setSubscriptionOpen(true)}
+          className="gap-2"
+        >
+          <CreditCard className="h-4 w-4" />
+          <span className="hidden sm:inline">订阅</span>
+        </Button>
         {user ? (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -102,6 +113,7 @@ export function ChatHeader({
           setLoginOpen(true)
         }}
       />
+      <SubscriptionDialog open={subscriptionOpen} onOpenChange={setSubscriptionOpen} />
     </header>
   )
 }
