@@ -51,7 +51,7 @@ const plans: Plan[] = [
   {
     id: 'enterprise',
     popular: true,
-    
+
 
     name: '企业版',
     price: '¥98',
@@ -75,7 +75,7 @@ export function SubscriptionDialog({ open, onOpenChange }: SubscriptionDialogPro
 
   const handleSubscribe = (planId: string) => {
     // 在当前标签页跳转到支付网站，用户可以使用返回按钮返回
-    window.location.href = 'https://www.creem.io/test/checkout/prod_iFAFbMbukp4AvJI81uIII/ch_7D8CX4rQ0bH1iQJlKTaX08'
+    window.location.href = 'https://www.creem.io/test/checkout/prod_iFAFbMbukp4AvJI81uIII/ch_6rc38zo6UVHwwWprwjxoKN'
   }
 
   const handleCancelPayment = () => {
