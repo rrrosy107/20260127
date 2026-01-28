@@ -11,9 +11,8 @@ import { MobileSidebar } from '@/components/mobile-sidebar'
 import { IdiomGame } from '@/components/idiom-game'
 import { RoleSwapGame } from '@/components/role-swap-game'
 import { AuthButton } from '@/components/auth-button'
-import { AuthProvider, useAuth } from '@/contexts/auth-context'
+import { AuthProvider } from '@/contexts/auth-context'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from '@/components/ui/dialog'
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 
 // Generate unique ID
 function generateId() {
@@ -23,7 +22,6 @@ function generateId() {
 
 
 function HomeContent() {
-  const { user, signInWithGoogle } = useAuth()
   const [conversations, setConversations] = useState<Conversation[]>([])
   const [currentConversationId, setCurrentConversationId] = useState<string | null>(null)
   const [sidebarOpen, setSidebarOpen] = useState(true)
@@ -128,13 +126,6 @@ function HomeContent() {
 
   const handleSendMessage = useCallback(
     async (text: string) => {
-      // Check if user is logged in
-      if (!user) {
-        alert('请先登录 Google 账号后再发送消息')
-        signInWithGoogle()
-        return
-      }
-
       if (!currentConversationId) {
         // Create a new conversation if none exists
         const newId = generateId()
@@ -151,7 +142,7 @@ function HomeContent() {
 
       sendMessage({ text })
     },
-    [currentConversationId, sendMessage, user, signInWithGoogle]
+    [currentConversationId, sendMessage]
   )
 
 

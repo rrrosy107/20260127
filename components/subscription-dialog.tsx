@@ -23,7 +23,7 @@ const plans: Plan[] = [
   {
     id: 'basic',
     name: '基础版',
-    price: '¥9.9',
+    price: '$8',
     period: '/月',
     features: [
       '每月100次对话',
@@ -36,7 +36,7 @@ const plans: Plan[] = [
   {
     id: 'pro',
     name: '专业版',
-    price: '¥29.9',
+    price: '$28',
     period: '/月',
     features: [
       '无限对话',
@@ -54,7 +54,7 @@ const plans: Plan[] = [
 
 
     name: '企业版',
-    price: '¥98',
+    price: '$98',
     period: '/月',
     features: [
       '无限对话',
@@ -75,7 +75,7 @@ export function SubscriptionDialog({ open, onOpenChange }: SubscriptionDialogPro
 
   const handleSubscribe = (planId: string) => {
     // 在当前标签页跳转到支付网站，用户可以使用返回按钮返回
-    window.location.href = 'https://www.creem.io/test/checkout/prod_iFAFbMbukp4AvJI81uIII/ch_6rc38zo6UVHwwWprwjxoKN'
+    window.location.href = 'https://buy.stripe.com/test_5kQaEXa4D6vF8sWg9iafS01'
   }
 
   const handleCancelPayment = () => {

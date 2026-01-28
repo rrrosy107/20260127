@@ -6,7 +6,6 @@ import { cn } from '@/lib/utils'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { useEffect, useRef, useState } from 'react'
 import tts from '@/lib/tts'
-import { useAuth } from '@/contexts/auth-context'
 
 interface ChatMessagesProps {
   messages: UIMessage[]
@@ -16,7 +15,6 @@ interface ChatMessagesProps {
 }
 
 export function ChatMessages({ messages, isLoading, onIdiomGameClick, onRoleSwapGameClick }: ChatMessagesProps) {
-  const { user } = useAuth()
   const scrollRef = useRef<HTMLDivElement>(null)
   const bottomRef = useRef<HTMLDivElement>(null)
   const [copiedMessageId, setCopiedMessageId] = useState<string | null>(null)
@@ -82,12 +80,6 @@ export function ChatMessages({ messages, isLoading, onIdiomGameClick, onRoleSwap
         <p className="mb-10 max-w-md text-center text-muted-foreground">
           我是您的AI智能助手，可以帮您解答问题、分析复杂问题等。
         </p>
-        {!user && (
-          <div className="mb-8 w-full max-w-md rounded-lg border border-warning bg-warning/10 p-4 text-center">
-            <p className="text-warning font-medium mb-2">请先登录 Google 账号</p>
-            <p className="text-sm text-muted-foreground">登录后即可开始与AI助手对话</p>
-          </div>
-        )}
         <div className="grid max-w-2xl grid-cols-1 gap-4 sm:grid-cols-2">
           {
             [
