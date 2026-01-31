@@ -11,7 +11,7 @@ import { MobileSidebar } from '@/components/mobile-sidebar'
 import { IdiomGame } from '@/components/idiom-game'
 import { RoleSwapGame } from '@/components/role-swap-game'
 import { AuthButton } from '@/components/auth-button'
-import { AuthProvider } from '@/contexts/auth-context'
+import { AuthProvider, useAuth } from '@/contexts/auth-context'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from '@/components/ui/dialog'
 
 // Generate unique ID
@@ -22,12 +22,44 @@ function generateId() {
 
 
 function HomeContent() {
+  const { user } = useAuth()
   const [conversations, setConversations] = useState<Conversation[]>([])
   const [currentConversationId, setCurrentConversationId] = useState<string | null>(null)
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [input, setInput] = useState('')
   const [idiomGameOpen, setIdiomGameOpen] = useState(false)
   const [roleSwapGameOpen, setRoleSwapGameOpen] = useState(false)
+
+  // 从localStorage加载用户对话数据
+  useEffect(() => {
+    if (user) {
+      const storedConversations = localStorage.getItem(`conversations_${user.id}`)
+      if (storedConversations) {
+        try {
+          const parsedConversations = JSON.parse(storedConversations, (key, value) => {
+            if (key === 'createdAt') {
+              return new Date(value)
+            }
+            return value
+          })
+          setConversations(parsedConversations)
+        } catch (error) {
+          console.error('Failed to parse stored conversations:', error)
+        }
+      }
+    } else {
+      // 未登录时清空对话
+      setConversations([])
+      setCurrentConversationId(null)
+    }
+  }, [user])
+
+  // 保存对话数据到localStorage
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem(`conversations_${user.id}`, JSON.stringify(conversations))
+    }
+  }, [conversations, user])
 
   const { messages, sendMessage, status, setMessages } = useChat({
     transport: new DefaultChatTransport({
@@ -229,6 +261,9 @@ function HomeContent() {
         <ChatInput
           onSend={handleSendMessage}
           isLoading={isLoading}
+          onExportChat={handleExportChat}
+          onClearChat={handleClearChat}
+          hasMessages={messages.length > 0}
         />
       </div>
 

@@ -3,7 +3,7 @@
 import React from "react"
 
 import { useState, useRef, useCallback } from 'react'
-import { Send } from 'lucide-react'
+import { Send, Download, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { cn } from '@/lib/utils'
@@ -11,6 +11,9 @@ import { cn } from '@/lib/utils'
 interface ChatInputProps {
   onSend: (message: string) => void
   isLoading: boolean
+  onExportChat?: () => void
+  onClearChat?: () => void
+  hasMessages?: boolean
 }
 
 
@@ -18,6 +21,9 @@ interface ChatInputProps {
 export function ChatInput({
   onSend,
   isLoading,
+  onExportChat,
+  onClearChat,
+  hasMessages = false,
 }: ChatInputProps) {
   const [input, setInput] = useState('')
   const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -87,6 +93,33 @@ export function ChatInput({
           </div>
         </form>
 
+        {/* Action Buttons */}
+        <div className="flex justify-end gap-2 mt-2">
+          {onExportChat && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={onExportChat}
+              disabled={!hasMessages || isLoading}
+              className="gap-1"
+            >
+              <Download className="h-3.5 w-3.5" />
+              <span className="text-xs">导出聊天</span>
+            </Button>
+          )}
+          {onClearChat && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={onClearChat}
+              disabled={!hasMessages || isLoading}
+              className="gap-1 text-destructive hover:text-destructive"
+            >
+              <Trash2 className="h-3.5 w-3.5" />
+              <span className="text-xs">清空聊天</span>
+            </Button>
+          )}
+        </div>
 
       </div>
     </div>

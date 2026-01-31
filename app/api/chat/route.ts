@@ -9,6 +9,7 @@ import {
 export const maxDuration = 60
 
 const OPENROUTER_MODEL = 'deepseek/deepseek-r1-0528:free'
+// const OPENROUTER_MODEL = 'tngtech/deepseek-r1t-chimera:free'
 
 export async function POST(req: Request) {
   const apiKey = process.env.OPENROUTER_API_KEY

@@ -21,7 +21,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     // 监听身份验证状态变化
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      // 当用户登录成功时显示欢迎提示
+      if (event === 'SIGNED_IN' && session?.user) {
+        const username = session.user.user_metadata?.name || session.user.email?.split('@')[0] || '用户'
+        alert(`${username}，欢迎登录！`)
+      }
       setSession(session)
       setUser(session?.user || null)
       setIsLoading(false)
@@ -51,6 +56,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signOut = async () => {
     await supabase.auth.signOut()
+    // 登出后刷新页面
+    window.location.reload()
   }
 
   return (
