@@ -264,6 +264,7 @@ function HomeContent() {
           onExportChat={handleExportChat}
           onClearChat={handleClearChat}
           hasMessages={messages.length > 0}
+          isAuthenticated={!!user}
         />
       </div>
 

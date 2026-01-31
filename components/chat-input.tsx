@@ -14,6 +14,7 @@ interface ChatInputProps {
   onExportChat?: () => void
   onClearChat?: () => void
   hasMessages?: boolean
+  isAuthenticated?: boolean
 }
 
 
@@ -24,6 +25,7 @@ export function ChatInput({
   onExportChat,
   onClearChat,
   hasMessages = false,
+  isAuthenticated = false,
 }: ChatInputProps) {
   const [input, setInput] = useState('')
   const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -31,14 +33,14 @@ export function ChatInput({
   const handleSubmit = useCallback(
     (e?: React.FormEvent) => {
       e?.preventDefault()
-      if (!input.trim() || isLoading) return
+      if (!input.trim() || isLoading || !isAuthenticated) return
       onSend(input.trim())
       setInput('')
       if (textareaRef.current) {
         textareaRef.current.style.height = 'auto'
       }
     },
-    [input, isLoading, onSend]
+    [input, isLoading, isAuthenticated, onSend]
   )
 
   const handleKeyDown = useCallback(
@@ -72,9 +74,12 @@ export function ChatInput({
               value={input}
               onChange={handleTextareaChange}
               onKeyDown={handleKeyDown}
-              placeholder="输入消息..."
-              disabled={isLoading}
-              className="min-h-[40px] max-h-[200px] flex-1 resize-none border-0 bg-transparent p-2 text-sm focus-visible:ring-0 focus-visible:ring-offset-0"
+              placeholder={isAuthenticated ? "输入消息..." : "请先登录以发送消息"}
+              disabled={!isAuthenticated || isLoading}
+              className={cn(
+                "min-h-[40px] max-h-[200px] flex-1 resize-none border-0 bg-transparent p-2 text-sm focus-visible:ring-0 focus-visible:ring-offset-0",
+                !isAuthenticated && "opacity-50"
+              )}
               rows={1}
             />
 
@@ -84,9 +89,9 @@ export function ChatInput({
               size="icon"
               className={cn(
                 'h-9 w-9 shrink-0 rounded-xl',
-                !input.trim() && 'opacity-50'
+                (!input.trim() || !isAuthenticated) && 'opacity-50'
               )}
-              disabled={!input.trim() || isLoading}
+              disabled={!input.trim() || isLoading || !isAuthenticated}
             >
               <Send className="h-4 w-4" />
             </Button>
